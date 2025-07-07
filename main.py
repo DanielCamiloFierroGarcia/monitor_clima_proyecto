@@ -33,11 +33,11 @@ if __name__ == "__main__":
                     log.write(f"[ALERTA] {alerta}\n")
 
             enviar_email_con_adjunto(
-                smtp_server="mail.smtp2go.com",
-                smtp_port=2525,
-                username="popiwor597@datingso.com",
-                password="JY2GqWziOao83bC3",
-                destinatario="dfierro192@gmail.com",
+                smtp_server="ejemplo.com",#cambiar a datos reales del server
+                smtp_port=2525,#cambiar a datos reales del server
+                username="ejemplo.com",#cambiar a datos reales del server
+                password="ejemplo3",#cambiar a datos reales del server
+                destinatario="ejemplo.com",
                 asunto="Reporte del clima 🌤️",
                 cuerpo="Adjunto el reporte automático del clima.",
                 ruta_adjunto=nombre_archivo
