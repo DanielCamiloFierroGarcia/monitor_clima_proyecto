@@ -1,6 +1,7 @@
 from clima_api import consultar_clima
 from utils.utils_archivos import guardar_reporte, registrar_log
 from utils.alertas import detectar_alertas
+from utils.utils import enviar_email_con_adjunto
 
 def mostrar_reporte(clima):
     print("\n=== Clima Actual ===")
@@ -16,7 +17,7 @@ if __name__ == "__main__":
 
     if clima:
         mostrar_reporte(clima)
-        guardar_reporte(clima)
+        nombre_archivo = guardar_reporte(clima)
         registrar_log(ciudad)
 
         alertas = detectar_alertas(clima)
@@ -30,8 +31,21 @@ if __name__ == "__main__":
             with open("logs/registro.txt", "a", encoding="utf-8") as log:
                 for alerta in alertas:
                     log.write(f"[ALERTA] {alerta}\n")
+
+            enviar_email_con_adjunto(
+                smtp_server="mail.smtp2go.com",
+                smtp_port=2525,
+                username="popiwor597@datingso.com",
+                password="JY2GqWziOao83bC3",
+                destinatario="dfierro192@gmail.com",
+                asunto="Reporte del clima 🌤️",
+                cuerpo="Adjunto el reporte automático del clima.",
+                ruta_adjunto=nombre_archivo
+            )
         else:
             print("✅ Sin alertas.")
             
     else:
         print("⚠️ No se pudo obtener el clima.")
+
+    

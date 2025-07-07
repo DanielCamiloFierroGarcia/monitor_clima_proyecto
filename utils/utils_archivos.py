@@ -20,6 +20,7 @@ def guardar_reporte(clima, carpeta="reportes"):
         f.write(f"Fecha: {fecha}\n")
 
     print(f"📄 Reporte guardado en: {nombre_archivo}")
+    return nombre_archivo
 
 def registrar_log(ciudad, archivo="reportes/log.txt"):
     crear_directorio_si_no_existe("reportes")
