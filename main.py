@@ -1,4 +1,5 @@
 from clima_api import consultar_clima
+from utils.utils_archivos import guardar_reporte, registrar_log
 
 def mostrar_reporte(clima):
     print("\n=== Clima Actual ===")
@@ -13,5 +14,7 @@ if __name__ == "__main__":
     clima = consultar_clima(ciudad)
     if clima:
         mostrar_reporte(clima)
+        guardar_reporte(clima)
+        registrar_log(ciudad)
     else:
         print("⚠️ No se pudo obtener el clima.")
