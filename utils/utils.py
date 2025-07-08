@@ -1,8 +1,9 @@
-import smtplib
+import smtplib, os, hashlib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 from pathlib import Path
+from datetime import datetime
 
 def enviar_email_con_adjunto(
         smtp_server: str,
@@ -39,3 +40,52 @@ def enviar_email_con_adjunto(
 
     except Exception as e:
         print("❌ Error al enviar el correo:", e)
+
+
+
+def calcular_hash(archivo):
+    hash_md5 = hashlib.md5()
+    with open(archivo, "r", encoding="utf-8") as f:
+        lineas  = f.readlines()
+        lineas = lineas[:-1]#ignora la ultima linea (fecha)
+        contenido = "".join(lineas).encode("utf-8") 
+        hash_md5.update(contenido)
+    
+    return hash_md5.hexdigest()
+
+def eliminar_duplicados_en_reportes():
+    carpeta = "reportes"
+    archivos = [f for f in os.listdir(carpeta) if f.endswith(".txt")]
+
+    hashes_vistos = {}
+    duplicados = []
+
+    for archivo in archivos:
+        ruta = os.path.join(carpeta, archivo)
+        if not os.path.isfile(ruta):
+            continue
+
+        try:
+            hash_actual = calcular_hash(ruta)
+        except Exception as e:
+            print(f"❌ No se pudo calcular hash de {ruta}: {e}")
+            continue
+
+        if hash_actual in hashes_vistos:
+            duplicados.append(ruta)
+        else:
+            hashes_vistos[hash_actual] = ruta
+
+    if duplicados:
+        for archivo in duplicados:
+            os.remove(archivo)
+            print(f"🗑️ Eliminado duplicado: {archivo}")
+            registrar_log_eliminado(archivo)
+    else:
+        print("✅ No se encontraron duplicados por contenido.")
+
+def registrar_log_eliminado(nombre_archivo):
+    log_path = os.path.join("reportes", "log.txt")
+    ahora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(log_path, "a", encoding="utf-8") as log:
+        log.write(f"[{ahora}] Eliminado duplicado: {nombre_archivo}\n")
