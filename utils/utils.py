@@ -89,3 +89,19 @@ def registrar_log_eliminado(nombre_archivo):
     ahora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(log_path, "a", encoding="utf-8") as log:
         log.write(f"[{ahora}] Eliminado duplicado: {nombre_archivo}\n")
+
+def mostrar_menu():
+    print("\n📊 MONITOREO CLIMÁTICO - MENÚ PRINCIPAL")
+    print("1. Consultar clima y guardar en histórico")
+    print("2. Eliminar duplicados del CSV histórico")
+    #print("2. Verificar alerta por clima extremo")
+    print("3. Graficar temperaturas de una ciudad")
+    print("4. Salir")
+
+def mostrar_reporte(clima):
+    print("\n=== Clima Actual ===")
+    print(f"🌍 Ciudad: {clima['ciudad']}, {clima['pais']}")
+    print(f"🌤️  Estado: {clima['descripcion']}")
+    print(f"🌡️  Temperatura: {clima['temperatura']} °C")
+    print(f"💧 Humedad: {clima['humedad']}%")
+    print(f"🌬️ Viento: {clima['viento']} m/s")

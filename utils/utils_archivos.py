@@ -1,5 +1,9 @@
-import os
+import os, csv
 from datetime import datetime
+
+# Crear carpeta data si no existe
+if not os.path.exists("data"):
+    os.makedirs("data")
 
 def crear_directorio_si_no_existe(nombre):
     if not os.path.exists(nombre):
@@ -29,3 +33,28 @@ def registrar_log(ciudad, archivo="reportes/log.txt"):
 
     with open(archivo, "a", encoding="utf-8") as f:
         f.write(linea)
+
+def guardar_datos_climaticos(ciudad, datos_clima):
+    """
+    Guarda los datos de clima en un archivo CSV por ciudad.
+
+    ciudad: str - nombre de la ciudad
+    datos_clima: dict - debe tener las claves: temperatura, humedad, viento
+    """
+    nombre_archivo = f"data/historico_{ciudad.lower()}.csv"
+    campos = ["fecha", "temperatura", "humedad", "viento"]
+
+    fila = {
+        "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "temperatura": datos_clima.get("temperatura"),
+        "humedad": datos_clima.get("humedad"),
+        "viento": datos_clima.get("viento")
+    }
+
+    archivo_existe = os.path.isfile(nombre_archivo)
+
+    with open(nombre_archivo, mode="a", newline="", encoding="utf-8") as archivo:
+        writer = csv.DictWriter(archivo, fieldnames=campos)
+        if not archivo_existe:
+            writer.writeheader()
+        writer.writerow(fila)
